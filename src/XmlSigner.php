@@ -77,6 +77,11 @@ final class XmlSigner
      * @var XmlReader
      */
     private $xmlReader;
+    
+    /**
+     * @var mixed
+     */
+    private $cert = '';
 
     /**
      * The constructor.
@@ -124,6 +129,9 @@ final class XmlSigner
     public function loadPfx(string $pfx, string $password): void
     {
         $status = openssl_pkcs12_read($pfx, $certInfo, $password);
+
+        // Add cert
+        $this->cert = trim(explode('-----', (string)$certInfo['cert'])[2]);
 
         if (!$status) {
             throw new XmlSignerException('Invalid PFX password');
@@ -420,6 +428,15 @@ final class XmlSigner
 
         $exponentElement = $xml->createElement('Exponent', $this->publicExponent);
         $rsaKeyValueElement->appendChild($exponentElement);
+
+        if(!empty($this->cert)) {
+            $x509DataElement = $xml->createElement('X509Data');
+            $keyInfoElement->appendChild($x509DataElement);
+
+            $x509Certificate = $xml->createElement('X509Certificate', $this->cert);
+            $x509DataElement->appendChild($x509Certificate);
+        }
+        
 
         // http://www.soapclient.com/XMLCanon.html
         $c14nSignedInfo = $signedInfoElement->C14N(true, false);
