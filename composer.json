@@ -1,14 +1,14 @@
 {
-    "name": "selective/xmldsig",
+    "name": "metalback/xmldsig",
     "type": "library",
-    "description": "Sign XML Documents with Digital Signatures",
+    "description": "Fork of Selective\\XmlDSig for Sign XML Documents with Digital Signatures",
     "keywords": [
         "xmldsig",
         "xml",
         "signatures",
         "verify"
     ],
-    "homepage": "https://github.com/selective-php/xmldsig",
+    "homepage": "https://github.com/metalback/xmldsig",
     "license": "MIT",
     "require": {
         "php": "^7.2 || ^8.0",
